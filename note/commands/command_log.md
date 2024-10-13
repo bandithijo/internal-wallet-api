@@ -18,3 +18,9 @@ rails g model Stock name:string symbol:string
 rails g model Wallet walletable:references{polymorphic} 'balance:decimal{10,2}'
 rails g model Transaction source_wallet:references target_wallet:references 'amount:decimal{10,2}' type:string
 ```
+
+## Create model STI for Transaction
+```
+rails g model CreditTransaction --no-migration
+rails g model DebitTransaction --no-migration
+```

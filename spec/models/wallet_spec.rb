@@ -12,4 +12,29 @@ RSpec.describe Wallet, type: :model do
     it { should validate_presence_of(:balance) }
     it { should validate_numericality_of(:balance).is_greater_than_or_equal_to(0) }
   end
+
+  describe 'Instance Methods' do
+    context '.update_balance!' do
+      let(:user) { create(:user) }
+      let!(:wallet) { create(:wallet, walletable: user, balance: 0) }
+
+      before do
+        create(:credit_transaction, amount: 100, target_wallet: wallet)
+        create(:debit_transaction, amount: 50, source_wallet: wallet)
+      end
+
+      it 'calculates the correct balance on transactions' do
+        wallet.update_balance!
+
+        expect(wallet.balance).to eq(50)
+      end
+
+      it 'does not allow negative balance' do
+        expect { create(:debit_transaction, amount: 200, source_wallet: wallet) }
+          .to raise_error(ActiveRecord::RecordNotSaved, "Failed to save the record")
+
+        expect(wallet.balance).to eq(50)
+      end
+    end
+  end
 end
