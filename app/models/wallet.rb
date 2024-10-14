@@ -13,4 +13,8 @@ class Wallet < ApplicationRecord
     self.balance = target_transactions.sum(:amount) - source_transactions.sum(:amount)
     save!
   end
+
+  def all_transactions
+    Transaction.where("source_wallet_id = ? OR target_wallet_id = ?", id, id)
+  end
 end

@@ -34,3 +34,9 @@ rails g model UserToken user:references token:string:index token_expired_at:date
 ```
 rails g controller Sessions create destroy --routing-specs
 ```
+
+## Create controller for Wallets, Transactions
+```
+rails g controller Wallets show deposit withdraw transfer --routing-specs
+rails g controller Transactions index --routing-specs
+```

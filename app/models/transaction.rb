@@ -24,6 +24,27 @@ class Transaction < ApplicationRecord
     end
   end
 
+  def self.perform_credit(target_wallet, amount)
+    CreditTransaction.perform_transaction(target_wallet: target_wallet, amount: amount)
+  end
+
+  def self.perform_debit(source_wallet, amount)
+    DebitTransaction.perform_transaction(source_wallet: source_wallet, amount: amount)
+  end
+
+  # Scopes
+  scope :wallet_id, ->(wallet_id) { where("source_wallet_id = ? OR target_wallet_id = ?", wallet_id, wallet_id) }
+  scope :_order, ->(order) {
+    case order
+    when 'desc'
+      reorder(created_at: :desc)
+    when 'asc'
+      reorder(created_at: :asc)
+    else
+      reorder(created_at: :desc)
+    end
+  }
+
   private
 
     def validate_source_and_target_wallets

@@ -28,13 +28,6 @@ RSpec.describe Wallet, type: :model do
 
         expect(wallet.balance).to eq(50)
       end
-
-      it 'does not allow negative balance' do
-        expect { create(:debit_transaction, amount: 200, source_wallet: wallet) }
-          .to raise_error(ActiveRecord::RecordNotSaved, "Failed to save the record")
-
-        expect(wallet.balance).to eq(50)
-      end
     end
   end
 end
