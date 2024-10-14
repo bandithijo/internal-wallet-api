@@ -52,7 +52,7 @@ RSpec.describe Transaction, type: :model do
 
     context '.perform_transaction' do
       it 'successfull performs a transaction and updates wallet balances' do
-        expect { Transaction.perform_transaction(source_wallet: source_wallet, target_wallet: target_wallet, amount: 500, user: user) }
+        expect { Transaction.perform_transaction(source_wallet: source_wallet, target_wallet: target_wallet, amount: 500, user: user, kind: "TRANSFER") }
           .to change { source_wallet.reload.balance }.from(1000).to(500)
           .and change { target_wallet.reload.balance }.from(0).to(500)
 
@@ -66,7 +66,7 @@ RSpec.describe Transaction, type: :model do
       end
 
       it 'raise an error when there are sufficient funds' do
-        expect { Transaction.perform_transaction(source_wallet: source_wallet, target_wallet: target_wallet, amount: 1500, user: user) }
+        expect { Transaction.perform_transaction(source_wallet: source_wallet, target_wallet: target_wallet, amount: 1500, user: user, kind: "TRANSFER") }
           .to raise_error(RuntimeError, "Insufficient funds")
 
         expect(source_wallet.reload.balance).to eq(1000)
@@ -76,7 +76,7 @@ RSpec.describe Transaction, type: :model do
       end
 
       it 'creates a transaction with only a source wallet (withdrawals or debiting a wallet)' do
-        expect { Transaction.perform_transaction(source_wallet: source_wallet, amount: 200, user: user) }
+        expect { Transaction.perform_transaction(source_wallet: source_wallet, amount: 200, user: user, kind: "WITHDRAW") }
           .to change { source_wallet.reload.balance }.from(1000).to(800)
 
         expect(Transaction.count).to eq(1)
@@ -88,7 +88,7 @@ RSpec.describe Transaction, type: :model do
       end
 
       it 'creates a transaction with only a target wallet (deposits or crediting a wallet)' do
-        expect { Transaction.perform_transaction(target_wallet: target_wallet, amount: 300, user: user) }
+        expect { Transaction.perform_transaction(target_wallet: target_wallet, amount: 300, user: user, kind: "DEPOSIT") }
           .to change { target_wallet.reload.balance }.from(0).to(300)
 
         expect(Transaction.count).to eq(1)

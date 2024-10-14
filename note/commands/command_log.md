@@ -45,3 +45,8 @@ rails g controller Transactions index --routing-specs
 ```
 rails g migration AddUserIdToTransactions user:references
 ```
+
+## Create migration AddKindToTransactions
+```
+rails g migration AddKindToTransactions kind:string
+```

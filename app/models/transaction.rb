@@ -9,7 +9,7 @@ class Transaction < ApplicationRecord
   validate :validate_source_and_target_wallets
 
   # Class Methods
-  def self.perform_transaction(source_wallet: nil, target_wallet: nil, amount:, user:)
+  def self.perform_transaction(source_wallet: nil, target_wallet: nil, amount:, user:, kind:)
     ActiveRecord::Base.transaction do
       if source_wallet
         raise "Insufficient funds" if source_wallet.balance < amount
@@ -21,16 +21,16 @@ class Transaction < ApplicationRecord
         target_wallet.update!(balance: target_wallet.balance + amount)
       end
 
-      create!(source_wallet: source_wallet, target_wallet: target_wallet, amount: amount, user: user)
+      create!(source_wallet: source_wallet, target_wallet: target_wallet, amount: amount, user: user, kind: kind)
     end
   end
 
-  def self.perform_credit(target_wallet, amount, user)
-    CreditTransaction.perform_transaction(target_wallet: target_wallet, amount: amount, user: user)
+  def self.perform_credit(target_wallet, amount, user, kind)
+    CreditTransaction.perform_transaction(target_wallet: target_wallet, amount: amount, user: user, kind: kind)
   end
 
-  def self.perform_debit(source_wallet, amount, user)
-    DebitTransaction.perform_transaction(source_wallet: source_wallet, amount: amount, user: user)
+  def self.perform_debit(source_wallet, amount, user, kind)
+    DebitTransaction.perform_transaction(source_wallet: source_wallet, amount: amount, user: user, kind: kind)
   end
 
   # Scopes
