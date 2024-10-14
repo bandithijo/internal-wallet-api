@@ -8,10 +8,23 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-# Create user
-user = User.new(
+# Create user and user's wallet
+user = User.create(
   name: "John Doe",
   email: "johndoe@gmail.com",
   password: "secure"
 )
-user.save!
+Wallet.create(walletable: user, balance: 1000.0)
+
+# Create team and team's wallet
+team = Team.create(
+  name: "Gresini"
+)
+Wallet.create(walletable: team, balance: 500.0)
+ 
+# Create stock and stock's wallet
+stock = Stock.create(
+  name: "Tesla, Inc.",
+  symbol: "TSLA"
+)
+Wallet.create(walletable: stock, balance: 100.0)

@@ -1,24 +1,32 @@
-# README
+# README: Internal Wallet API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Ruby version
+```
+3.3.5
+```
 
-Things you may want to cover:
+## Configuration
+```
+$ bundle install
+```
 
-* Ruby version
+## Database initialization
+```
+$ bin/rails db:create
+$ bin/rails db:migrate
+```
 
-* System dependencies
+## Data seeds
+```
+$ bin/rails db:seed
+```
 
-* Configuration
+## Run the test suite
+```
+$ bin/rails rspec
+```
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Run the server
+```
+$ bin/rails s
+```
