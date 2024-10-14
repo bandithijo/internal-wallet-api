@@ -1,5 +1,6 @@
 class Transaction < ApplicationRecord
   # Associations
+  belongs_to :user
   belongs_to :source_wallet, class_name: "Wallet", optional: true
   belongs_to :target_wallet, class_name: "Wallet", optional: true
 
@@ -8,7 +9,7 @@ class Transaction < ApplicationRecord
   validate :validate_source_and_target_wallets
 
   # Class Methods
-  def self.perform_transaction(source_wallet: nil, target_wallet: nil, amount:)
+  def self.perform_transaction(source_wallet: nil, target_wallet: nil, amount:, user:)
     ActiveRecord::Base.transaction do
       if source_wallet
         raise "Insufficient funds" if source_wallet.balance < amount
@@ -20,20 +21,29 @@ class Transaction < ApplicationRecord
         target_wallet.update!(balance: target_wallet.balance + amount)
       end
 
-      create!(source_wallet: source_wallet, target_wallet: target_wallet, amount: amount)
+      create!(source_wallet: source_wallet, target_wallet: target_wallet, amount: amount, user: user)
     end
   end
 
-  def self.perform_credit(target_wallet, amount)
-    CreditTransaction.perform_transaction(target_wallet: target_wallet, amount: amount)
+  def self.perform_credit(target_wallet, amount, user)
+    CreditTransaction.perform_transaction(target_wallet: target_wallet, amount: amount, user: user)
   end
 
-  def self.perform_debit(source_wallet, amount)
-    DebitTransaction.perform_transaction(source_wallet: source_wallet, amount: amount)
+  def self.perform_debit(source_wallet, amount, user)
+    DebitTransaction.perform_transaction(source_wallet: source_wallet, amount: amount, user: user)
   end
 
   # Scopes
-  scope :wallet_id, ->(wallet_id) { where("source_wallet_id = ? OR target_wallet_id = ?", wallet_id, wallet_id) }
+  scope :type, ->(type) {
+    case type
+    when 'Debit', 'debit'
+      where(type: 'DebitTransaction')
+    when 'Credit', 'credit'
+      where(type: 'CreditTransaction')
+    else
+      where(type: nil)
+    end
+  }
   scope :_order, ->(order) {
     case order
     when 'desc'

@@ -13,7 +13,7 @@ class WalletsController < ApplicationController
     amount = wallet_params[:amount].to_f
 
     if amount > 0
-      Transaction.perform_credit(@wallet, amount)
+      Transaction.perform_credit(@wallet, amount, current_user)
 
       render json: { message: "Deposit successful", amount: amount, balance: @wallet.reload.balance.to_f }, status: :ok
     else
@@ -26,7 +26,7 @@ class WalletsController < ApplicationController
     amount = wallet_params[:amount].to_f
 
     if amount > 0 && @wallet.balance >= amount
-      Transaction.perform_debit(@wallet, amount)
+      Transaction.perform_debit(@wallet, amount, current_user)
 
       render json: { message: "Withdrawal successful", amount: amount, balance: @wallet.reload.balance.to_f }, status: :ok
     else
@@ -46,8 +46,8 @@ class WalletsController < ApplicationController
     return render json: { error: "Insufficient balance" }, status: :unprocessable_entity if @wallet.balance < amount
 
     ActiveRecord::Base.transaction do
-      Transaction.perform_debit(@wallet, amount)
-      Transaction.perform_credit(target_wallet, amount)
+      Transaction.perform_debit(@wallet, amount, current_user)
+      Transaction.perform_credit(target_wallet, amount, current_user)
     end
 
     render json: { message: "Transfer successful", amount: amount, balance: @wallet.reload.balance.to_f }, status: :ok

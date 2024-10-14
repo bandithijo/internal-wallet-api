@@ -40,3 +40,8 @@ rails g controller Sessions create destroy --routing-specs
 rails g controller Wallets show deposit withdraw transfer --routing-specs
 rails g controller Transactions index --routing-specs
 ```
+
+## Create migration AddUserIdToTransactions
+```
+rails g migration AddUserIdToTransactions user:references
+```

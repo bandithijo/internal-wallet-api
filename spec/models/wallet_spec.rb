@@ -19,8 +19,8 @@ RSpec.describe Wallet, type: :model do
       let!(:wallet) { create(:wallet, walletable: user, balance: 0) }
 
       before do
-        create(:credit_transaction, amount: 100, target_wallet: wallet)
-        create(:debit_transaction, amount: 50, source_wallet: wallet)
+        create(:credit_transaction, amount: 100, target_wallet: wallet, user: user)
+        create(:debit_transaction, amount: 50, source_wallet: wallet, user: user)
       end
 
       it 'calculates the correct balance on transactions' do
