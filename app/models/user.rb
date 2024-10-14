@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   # Associations
   has_one :wallet, as: :walletable, dependent: :destroy
+  has_many :user_tokens, dependent: :destroy
 
   # Validations
   validates :name, presence: true

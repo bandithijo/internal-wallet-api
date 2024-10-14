@@ -7,4 +7,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  post "sign-in", to: "sessions#create", defaults: { format: :json }
+  delete "sign-out", to: "sessions#destroy", defaults: { format: :json }
 end

@@ -10,7 +10,7 @@ rails new internal-wallet-api -T --api -d postgreql
 rails g rspec:install
 ```
 
-## Create model migration for User, Team, Stock, Wallet, Transaction
+## Create model for User, Team, Stock, Wallet, Transaction
 ```
 rails g model User name:string email:string password_digest:string
 rails g model Team name:string
@@ -23,4 +23,14 @@ rails g model Transaction source_wallet:references target_wallet:references 'amo
 ```
 rails g model CreditTransaction --no-migration
 rails g model DebitTransaction --no-migration
+```
+
+## Create model UserToken
+```
+rails g model UserToken user:references token:string:index token_expired_at:datetime
+```
+
+## Create controller for Sessions
+```
+rails g controller Sessions create destroy --routing-specs
 ```
