@@ -30,4 +30,6 @@
 !/tmp/storage/.keep
 
 # Ignore master key for decrypting credentials and more.
-/config/master.key
+# Important: config/master.key is temporarily removed from .gitignore for coding test.
+# Ensure it is re-added before committing to production.
+# /config/master.key
