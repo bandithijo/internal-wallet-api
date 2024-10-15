@@ -36,19 +36,19 @@ class Transaction < ApplicationRecord
   # Scopes
   scope :type, ->(type) {
     case type
-    when 'Debit', 'debit'
-      where(type: 'DebitTransaction')
-    when 'Credit', 'credit'
-      where(type: 'CreditTransaction')
+    when "Debit", "debit"
+      where(type: "DebitTransaction")
+    when "Credit", "credit"
+      where(type: "CreditTransaction")
     else
       where(type: nil)
     end
   }
   scope :_order, ->(order) {
     case order
-    when 'desc'
+    when "desc"
       reorder(created_at: :desc)
-    when 'asc'
+    when "asc"
       reorder(created_at: :asc)
     else
       reorder(created_at: :desc)

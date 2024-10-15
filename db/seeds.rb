@@ -21,7 +21,7 @@ team = Team.create(
   name: "Gresini"
 )
 Wallet.create(walletable: team, balance: 500.0)
- 
+
 # Create stock and stock's wallet
 stock = Stock.create(
   name: "Tesla, Inc.",
