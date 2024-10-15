@@ -12,8 +12,7 @@ $ bundle install
 
 ## Database initialization
 ```
-$ bin/rails db:create
-$ bin/rails db:migrate
+$ bin/rails db:setup
 ```
 
 ## Data seeds
