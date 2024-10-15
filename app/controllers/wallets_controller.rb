@@ -5,7 +5,9 @@ class WalletsController < ApplicationController
   def show
     @wallet.update_balance!
 
-    render json: { id: @wallet.id, balance: @wallet.balance.to_f }
+    data = { id: @wallet.id, balance: @wallet.balance.to_f }
+
+    api(data, :ok)
   end
 
   # POST /wallet/deposit
@@ -16,9 +18,11 @@ class WalletsController < ApplicationController
     if amount > 0
       Transaction.perform_credit(@wallet, amount, current_user, kind)
 
-      render json: { message: "Deposit successful", amount: amount, balance: @wallet.reload.balance.to_f }, status: :ok
+      data = { message: "Deposit successful", amount: amount, balance: @wallet.reload.balance.to_f }
+
+      api(data, :ok)
     else
-      render json: { error: "Invalid amount" }, status: :unprocessable_entity
+      api({ error: "Invalid amount" }, :unprocessable_entity)
     end
   end
 
@@ -30,9 +34,11 @@ class WalletsController < ApplicationController
     if amount > 0 && @wallet.balance >= amount
       Transaction.perform_debit(@wallet, amount, current_user, kind)
 
-      render json: { message: "Withdrawal successful", amount: amount, balance: @wallet.reload.balance.to_f }, status: :ok
+      data = { message: "Withdrawal successful", amount: amount, balance: @wallet.reload.balance.to_f }
+
+      api(data, :ok)
     else
-      render json: { error: "Insufficient balance or invalid amount" }, status: :unprocessable_entity
+      api({ error: "Insufficient balance or invalid amount" }, :unprocessable_entity)
     end
   end
 
@@ -42,20 +48,22 @@ class WalletsController < ApplicationController
     target_wallet = Wallet.find_by(walletable_type: transfer_params[:target_type], walletable_id: transfer_params[:target_id])
     amount = transfer_params[:amount].to_f
 
-    return render json: { error: "Target wallet not found" }, status: :not_found if target_wallet.nil?
+    return api({ error: "Target wallet not found" }, :not_found) if target_wallet.nil?
 
-    return render json: { error: "Invalid transfer amount" }, status: :unprocessable_entity if amount <= 0
+    return api({ error: "Invalid transfer amount" }, :unprocessable_entity) if amount <= 0
 
-    return render json: { error: "Insufficient balance" }, status: :unprocessable_entity if @wallet.balance < amount
+    return api({ error: "Insufficient balance" }, :unprocessable_entity) if @wallet.balance < amount
 
     ActiveRecord::Base.transaction do
       Transaction.perform_debit(@wallet, amount, current_user, kind)
       Transaction.perform_credit(target_wallet, amount, current_user, kind)
     end
 
-    render json: { message: "Transfer successful", amount: amount, balance: @wallet.reload.balance.to_f }, status: :ok
+    data = { message: "Transfer successful", amount: amount, balance: @wallet.reload.balance.to_f }
+
+    api(data, :ok)
   rescue ActiveRecord::RecordInvalid => e
-    render json: { error: e.message }, status: :unprocessable_entity
+    api({ error: e.message }, :unprocessable_entity)
   end
 
   private

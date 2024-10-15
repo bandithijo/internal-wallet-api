@@ -7,7 +7,7 @@ class TransactionsController < ApplicationController
       transactions = transactions.public_send(key, value) if value.present?
     end
 
-    render json: transactions.map { |transaction|
+    data = transactions.map { |transaction|
       {
         id: transaction.id,
         created_at: transaction.created_at,
@@ -17,6 +17,8 @@ class TransactionsController < ApplicationController
         amount: transaction.amount.to_f
       }
     }
+
+    api(data, :ok)
   end
 
   private

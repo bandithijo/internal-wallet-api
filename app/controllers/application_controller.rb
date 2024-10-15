@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::API
+  include Response
+
   before_action :authorize_request
 
   attr_reader :current_user
@@ -14,9 +16,9 @@ class ApplicationController < ActionController::API
       if user_token && user_token.token_expired_at > Time.current
         @current_user = User.find(decoded_token[:user_id]) if decoded_token
       else
-        render json: { errors: "Unauthorized" }, status: :unauthorized
+        api({ errors: "Unauthorized" }, :unauthorized)
       end
     rescue ActiveRecord::RecordNotFound, JWT::DecodeError
-      render json: { errors: "Unauthorized" }, status: :unauthorized
+      api({ errors: "Unauthorized" }, :unauthorized)
     end
 end

@@ -13,9 +13,9 @@ Rails.application.routes.draw do
 
   resource :wallet, only: [ :show ], defaults: { format: :json } do
     collection do
-      post :deposit, defaults: { format: :json }
-      post :withdraw, defaults: { format: :json }
-      post :transfer, defaults: { format: :json }
+      post :deposit
+      post :withdraw
+      post :transfer
     end
   end
 

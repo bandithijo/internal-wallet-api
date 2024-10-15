@@ -28,7 +28,7 @@ RSpec.describe SessionsController, type: :request do
       it "should return http status 401 Unauthorized" do
         expect(response).to have_http_status(401)
         expect(response.message).to eq("Unauthorized")
-        expect(JSON.parse(response.body)["error"]).to eq("Invalid email or password")
+        expect(JSON.parse(response.body)["data"]["error"]).to eq("Invalid email or password")
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe SessionsController, type: :request do
       it "should return http status 201 Created" do
         expect(response).to have_http_status(201)
         expect(response.message).to eq("Created")
-        expect(JSON.parse(response.body)["message"]).to eq("Login successful")
+        expect(JSON.parse(response.body)["data"]["message"]).to eq("Login successful")
       end
     end
   end

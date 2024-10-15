@@ -9,16 +9,18 @@ class SessionsController < ApplicationController
       token_expired_at = 24.hours.from_now
       user_token = UserToken.create!(user: user, token: token, token_expired_at: token_expired_at)
 
-      render json: {
+      data = {
         message: "Login successful",
         token: token,
         token_expired_at: {
           format_datetime: token_expired_at,
           format_integer: token_expired_at.to_i
         }
-      }, status: :created
+      }
+
+      api(data, :created)
     else
-      render json: { error: "Invalid email or password" }, status: :unauthorized
+      api({ error: "Invalid email or password" }, :unauthorized)
     end
   end
 
@@ -29,9 +31,9 @@ class SessionsController < ApplicationController
     if user_token
       user_token.destroy
 
-      render json: { message: "Logout successful" }, status: :no_content
+      api({ message: "Logout successful" }, :no_content)
     else
-      render json: { error: "Invalid token" }, status: :unauthorized
+      api({ error: "Invalid token" }, :unauthorized)
     end
   end
 
