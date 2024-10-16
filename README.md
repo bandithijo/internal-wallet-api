@@ -11,7 +11,12 @@ This repository contains the coding test for evaluating essential skills and app
 Ruby 3.3.5
 ```
 
-## 🔗 Database Engine
+## 🚀 Rails version
+```
+Rails 7.2.1
+```
+
+## 📦 Database Engine
 ```
 PostgreSQL v13.x (minimal)
 ```
