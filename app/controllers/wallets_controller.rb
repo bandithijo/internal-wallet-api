@@ -1,11 +1,48 @@
 class WalletsController < ApplicationController
-  before_action :set_wallet, only: [ :show, :deposit, :withdraw, :transfer ]
+  before_action :set_wallet, only: [ :user_balance, :deposit, :withdraw, :transfer ]
 
-  # GET /wallet
-  def show
-    @wallet.update_balance!
+  # GET /wallet/user-balance
+  def user_balance
+    @user_wallet.update_balance!
 
-    data = { id: @wallet.id, balance: @wallet.balance.to_f }
+    data = {
+      id: @user_wallet.id,
+      updated_at: @user_wallet.updated_at,
+      balance: @user_wallet.balance.to_f
+    }
+
+    api(data, :ok)
+  end
+
+  # GET /wallet/teams-balance
+  def teams_balance
+    @teams_wallet = Wallet.where(walletable_type: "Team")
+
+    data = @teams_wallet.map { |wallet|
+      {
+        id: wallet.id,
+        updated_at: wallet.updated_at,
+        name: Team.find_by(id: wallet.walletable_id).name,
+        balance: wallet.balance.to_f
+      }
+    }
+
+    api(data, :ok)
+  end
+
+  # GET /wallet/stocks-balance
+  def stocks_balance
+    @stocks_wallet = Wallet.where(walletable_type: "Stock")
+
+    data = @stocks_wallet.map { |wallet|
+      {
+        id: wallet.id,
+        updated_at: wallet.updated_at,
+        name: Stock.find_by(id: wallet.walletable_id).name,
+        symbol: Stock.find_by(id: wallet.walletable_id).symbol,
+        balance: wallet.balance.to_f
+      }
+    }
 
     api(data, :ok)
   end
@@ -69,7 +106,7 @@ class WalletsController < ApplicationController
   private
 
     def set_wallet
-      @wallet = current_user.wallet
+      @user_wallet = current_user.wallet
     end
 
     def wallet_params

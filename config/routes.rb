@@ -11,8 +11,11 @@ Rails.application.routes.draw do
   post "sign-in", to: "sessions#create", defaults: { format: :json }
   delete "sign-out", to: "sessions#destroy", defaults: { format: :json }
 
-  resource :wallet, only: [ :show ], defaults: { format: :json } do
+  resource :wallet, defaults: { format: :json } do
     collection do
+      get "user-balance"
+      get "teams-balance"
+      get "stocks-balance"
       post :deposit
       post :withdraw
       post :transfer
