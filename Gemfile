@@ -30,6 +30,7 @@ gem "bootsnap", require: false
 gem "rack-cors"
 
 gem "jwt", "~> 2.9", ">= 2.9.3"
+gem 'httparty', '~> 0.22.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -46,4 +47,5 @@ group :development, :test do
   gem "rspec-rails", "~> 6.0.3"
   gem "rspec-retry", "~> 0.6.2"
   gem "shoulda-matchers", "~> 5.3.0"
+  gem "webmock", "~> 3.24"
 end
