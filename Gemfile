@@ -43,7 +43,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem "factory_bot_rails", "~> 6.2.0"
-  gem "faker", "~> 3.2.2"
+  gem "faker", "~> 3.4.2"
   gem "rspec-rails", "~> 6.0.3"
   gem "rspec-retry", "~> 0.6.2"
   gem "shoulda-matchers", "~> 5.3.0"
