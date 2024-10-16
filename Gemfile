@@ -30,7 +30,7 @@ gem "bootsnap", require: false
 gem "rack-cors"
 
 gem "jwt", "~> 2.9", ">= 2.9.3"
-gem 'httparty', '~> 0.22.0'
+gem "httparty", "~> 0.22.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

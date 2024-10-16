@@ -18,7 +18,6 @@ RSpec.describe LatestStockPrice, type: :lib do
   end
 
   describe 'LatestStockPrice Library' do
-
     context 'Check the Class' do
       it { expect(LatestStockPrice.class.name).to eq('Class') }
       it { expect(LatestStockPrice.new.class.name).to eq('LatestStockPrice') }
