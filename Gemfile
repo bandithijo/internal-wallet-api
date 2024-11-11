@@ -44,7 +44,7 @@ group :development, :test do
 
   gem "factory_bot_rails", "~> 6.2.0"
   gem "faker", "~> 3.2.2"
-  gem "rspec-rails", "~> 6.0.3"
+  gem "rspec-rails", "~> 7.1.0"
   gem "rspec-retry", "~> 0.6.2"
   gem "shoulda-matchers", "~> 5.3.0"
   gem "webmock", "~> 3.24"
